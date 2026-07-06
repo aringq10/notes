@@ -22,3 +22,4 @@ nm - output symbol information (undefined, text, data).
 readelf - inspect ELF file contents, the header, dynamic section etc.
 patchelf - modify ELF file.
 objdump - can parse many object format, disassemble them.
+ldconfig - update linker's runtime cache (/etc/ld.so.cache).
