@@ -5,7 +5,7 @@ If a symbol or function isn't declared anywhere (neither in the local .c file or
 
 # Libraries
 After preprocessing, an object file is compiled (gcc -c) with undefined symbols which come from libraries.
-To tell the compiler which libraries to use, use the -l flag (e.g. -lsfml-audio).
+To tell the compiler which libraries to use, use the -l flag. If I have a file named libfoo-1.a, then i need to pass a flag like this: -lfoo-1. Same with .so libs.
 The runtime loader has a name→location cache (ld.so.cache) for system-wide .so files, for fast lookup at runtime. It covers /lib, /usr/lib, and dirs in /etc/ld.so.conf. (Build-time: the linker finds libs via -L + defaults, analogous to -I for headers.)
 Truly undefined symbols after linking (neither in the local .o files or any of the passed libraries) surfaces as undefined reference.
 
@@ -15,6 +15,9 @@ Build-time linker (ld) finds libs via -L + defaults. Linker takes the used code 
 ## Dynamic linking
 -rpath embeds the path where the runtime linker should look for custom libraries, the -L flag only tells the linker this information during build time.
 Runtime loader (ld.so) finds .so via ld.so.cache + -rpath. Linker leaves the undefined symbols pointing at stubs or nothing and resolves them at runtime from the ELF's NEEDED library entries.
+
+### Shared library naming and versioning
+libfoo.so (unversioned linker name, used at build time via -l) -> libfoo.so.<major> (the soname baked into binaries and resolved at runtime; major changes only on ABI breaks) -> libfoo.so.<major>.<minor> (the real file, whose full version lets multiple versions coexist on disk).
 
 # CLI tools
 ldd - run linker .so resolver and print deps + their paths on your system.
